@@ -1,0 +1,118 @@
+/* DISPOSITION GÉNÉRALE */
+
+*{font-family: verdana; color: #e0cfb8;}
+body{background: #261d11; margin: 0px;}
+section{padding: 10px;}
+#time{color: #4c3b25;}
+section#main{
+  margin: 0px;
+  padding: 0px;
+}
+
+.Question{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.Question label[for]{
+}
+.droit{
+  /*display: flex;*/
+
+  /*position: relative;*/
+}
+.plat{
+  /*display: flex;*/
+  /*position: relative;*/
+}
+
+
+/* PERSONNALISATION DES BOUTONS RADIO • */
+/* Customize the label (the container) */
+.container {
+  padding:0px;
+  cursor: pointer;
+  font-size: initial;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border-radius: 12px;
+  background: 
+}
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.container span{
+  display: block;
+  padding: 8px 16px;
+}
+/*.etiquette{margin-bottom:100px;}*/
+
+/* On mouse-over, add a brown background color */
+.container:hover {
+  background-color: #4c3b25;
+}
+/* When the checkbox is checked, add a light background */
+.container input:checked + span{
+  background-color: #e0cfb8;
+  color: #4c3b25;
+  border-radius: 12px;
+}
+
+/* TEXT FIELD (Number field minutes) */
+
+input[type="number"]{
+  background:#e0cfb8;
+  border-radius:10px;
+  border:solid 4px #261d11;
+  padding:8px;
+  box-sizing:border-box;
+  color:#4c3b25;
+  font-size: initial;
+  max-width:70px;
+}
+input[type="number"]:focus{border:solid 4px #675032;}
+
+
+/* BUTTON */
+.btn{
+  transition-duration: 0.15s;
+  -webkit-transition-duration: 0.15s; /* Safari */
+  text-decoration: none;
+  padding: 10px;
+  margin: 8px 0px 0px 0px;
+  font-size: initial;
+  border-radius: 10px;
+  border: none;
+  background: #4c3b25;
+  color: #e0cfb8;
+}
+.btn:hover{
+  background: #e0cfb8;
+  color: #4c3b25;
+}
+
+/* RÉSULTAT */
+#section_result{
+  padding: 0px;
+  position: fixed;
+  bottom: 0px;
+  background-color: #19140b;
+  width: 100%;
+}
+#section_result p,h2,h3,h4,h5{text-align: center;}
+#line_result{
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1.6;
+}
+@media screen and (max-width: 992px){
+  .rapetisse{font-size: 10px;}
+  .rm{display:none;}
+}

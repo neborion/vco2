@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset=utf-8>
+	<meta name=description content="Empreinte carbone du streaming vidéo">
+	<meta name=viewport content="width=device-width, initial-scale=1">
+	<title>VCO2 Empreinte vidéo</title>
+	<link rel="stylesheet" type="text/css" href="API-accordeon-deroulant.css">
+	<script src="API-accordeon-deroulant.js"></script>
+	<style type="text/css">
+		/* Le code CSS ET JS de l'accordéon est dans un fichier séparé API-accordeon-deroulant.js/css */
+
+	</style>
+	<link rel="stylesheet" type="text/css" href="index.css">
+	<script type="text/javascript">
+		/* Le code CSS ET JS de l'accordéon est dans un fichier séparé API-accordeon-deroulant.js/css */
+
+		/* CONSTANTES */
+		// var intensite_carbone_mix_elec_france = 35; // gCO2eq/kWh
+
+		/* CALCUL */
+
+		function calcul (){
+				// On regarde quelle box est checké (qualité vidéo) :
+				var qualiteElementsList = document.getElementsByName("qualite_choice");
+				for (var i = qualiteElementsList.length - 1; i >= 0; i--) {
+					if (qualiteElementsList[i].checked) {
+						poidParMinute = qualiteElementsList[i].value;
+						document.getElementById("debit").innerHTML = parseFloat(qualiteElementsList[i].value);
+					}
+				}
+				// On regarde quelle box est checké (appareil / device / terminal) :
+				var deviceElementsList = document.getElementsByName("device_choice");
+				for (var i = deviceElementsList.length - 1; i >= 0; i--) {
+					if (deviceElementsList[i].checked) {
+						var energie_flux_device = parseFloat(deviceElementsList[i].value);
+					}
+				}
+				// On regarde quelle box est checké (appareil / device / terminal) :
+				var infraElementsList = document.getElementsByName("infra_choice");
+				for (var i = infraElementsList.length - 1; i >= 0; i--) {
+					if (infraElementsList[i].checked) {
+						var energie_flux_infrastructure = parseFloat(infraElementsList[i].value);
+					}
+				}
+				// On regarde quelle box est checké (mix énergétique) :
+				var mixElementList = document.getElementsByName("mix_choice");
+				for (var i = mixElementList.length - 1; i >= 0; i--) {
+					if (mixElementList[i].checked) {
+						var intensite_carbone_mix_elec_france = parseFloat(mixElementList[i].value);
+					}
+				}
+				var duree = parseInt(document.getElementById("time").value);
+				var poid_total = duree * poidParMinute;
+				var energie_device = energie_flux_device * duree;
+				var energie_serveur = poid_total * 0.072;
+				// Poid(en Mo) * conso Data-Center (=7.2E-11 kWh/Octet = 0,072Wh/Mo) VÉRIFIER cette conversion !!!
+				var energie_infrastructure = energie_flux_infrastructure * poid_total;
+				// var intensite_carbone_mix_elec_france = 
+
+				var energie_totale = energie_device + energie_serveur + energie_infrastructure;
+				var result = (energie_device + energie_serveur + energie_infrastructure) * (intensite_carbone_mix_elec_france/1000);
+				var resultTemps = result * (365*24*60) / 2000000;
+				
+				document.getElementById("ICRF").innerHTML=intensite_carbone_mix_elec_france;
+				document.getElementById("poid").innerHTML=poid_total.toFixed(2);
+				document.getElementById("consoTerminal").innerHTML = energie_device.toFixed(2);
+				document.getElementById("consoServeur").innerHTML = energie_serveur.toFixed(2);
+				document.getElementById("consoInfra").innerHTML = energie_infrastructure.toFixed(2);
+				document.getElementById("consoTotale").innerHTML = energie_totale.toFixed(2);
+				document.getElementById("result").innerHTML = result.toFixed(2);
+				document.getElementById("equitemps").innerHTML = parseInt(result);
+			}
+
+
+
+		window.onload = function(){
+
+			chopperEtActiverAccordeon();//Code de la fonction dans API-accordeon-deroulant.js
+
+			// Appliquer les régalges par défaut aux checkbox-ratio
+			var ratioCheckedByDefaultList = document.getElementsByClassName("default");
+			for (var i = ratioCheckedByDefaultList.length - 1; i >= 0; i--) {
+				ratioCheckedByDefaultList[i].checked = true;
+			}			
+
+			// Pour que tout les boutons estampillés class="listener" déclenche le calcul au moindre click :
+			var listenerList = document.getElementsByClassName("listener");
+			for (i = 0; i < listenerList.length; i++) {
+				listenerList[i].addEventListener("click", calcul, false);
+			}
+
+			// Lancement du calcul dès chargement de la page
+			calcul();
+
+			/* AJUSTEMENT DE LA MARGE DE FIN DE SCROLL POUR ÉVITER RECOUVREMENT */
+			var result_height = document.getElementById('section_result').clientHeight;
+			console.log(result_height);
+			document.getElementById("main").style.margin = "0px 0px "+String(result_height)+"px 0px";
+
+		}
+	</script>
+</head>
+<body>
+<section id="main">
+<section>
+	<h1 id="title">VCO2 - L'empreinte vidéo</h1>
+	<p>Quelle est l'empreinte carbone de votre vidéo de ce soir ?</p>
+</section>
+<section>
+	<form method="post" action="#">
+		<!-- Qualité / Temps / Device -->
+		<label for="qualite">Quelle qualité ?</label> :
+		<p class="Question" id="Q1">
+			<label class="container droit"><input type="radio" name="qualite_choice" value="0300" class="listener"><span>&nbsp;4K&nbsp;</span></label>
+			<label class="container droit"><input type="radio" name="qualite_choice" value="0060" class="listener default"><span>1080p</span></label>
+			<label class="container droit"><input type="radio" name="qualite_choice" value="37.5" class="listener"><span>720p</span></label>
+			<label class="container droit"><input type="radio" name="qualite_choice" value="18.8" class="listener"><span>480p</span></label>
+			<label class="container droit"><input type="radio" name="qualite_choice" value="07.5" class="listener"><span>360p</span></label>
+			<!-- Suggestion Très élevé (4K), Standard (1080p), Basse définition (360p) -->
+			<!-- Par défaut : 1080p -->
+		</p>
+		<!-- &nbsp; -->
+		<label for="temps" class="etiquette">Nous regardons une vidéo de quelle durée ? </label>
+		<p class="Question" id="Q2">
+			<input id="time" type="number" name="number_picked" min="0" max="999" step="1" value="15" oninput="calcul()">
+			<span> minutes</span>
+		</p>
+		<label for="device" class="etiquette">Sur quoi regardons nous cette vidéo ? </label>
+		<p class="Question" id="Q3">
+			<label class="container plat"><input type="radio" name="device_choice" value="1.1E-1" class="listener"><span>Smartphone</span></label>
+			<label class="container plat"><input type="radio" name="device_choice" value="3.2E-1" class="listener default"><span>Laptop</span></label>
+		</p>
+		<label for="infra" class="etiquette">Comment sommes-nous connectés ? </label>
+		<p class="Question" id="Q4">
+			<label class="container plat"><input type="radio" name="infra_choice" value="0.152" class="listener default"><span>Wifi</span></label>
+			<label class="container plat"><input type="radio" name="infra_choice" value="0.884" class="listener"><span>4G</span></label>
+			<label class="container plat"><input type="radio" name="infra_choice" value="0.429" class="listener"><span>Ethernet</span></label>
+		</p>
+		<p>L'impact change selon la manière dont on produit l'électricité, voici 3 échelles géographiques.</p>
+		<label for="intensite_mix" class="etiquette">Intensité carbone selon mix électrique</label>
+		<p class="Question" id="Q5">
+			<label class="container plat"><input type="radio" name="mix_choice" value="35" class="listener default"><span>Moyenne France</span></label>
+			<label class="container plat"><input type="radio" name="mix_choice" value="344" class="listener"><span>Moyenne Europe</span></label>
+			<label class="container plat"><input type="radio" name="mix_choice" value="550" class="listener"><span>Moyenne Monde</span></label>
+		</p>
+	</form>
+
+</section>
+<section id="section_detaille">
+	<button class="accordion">Voir les détails du calcul.</button>
+	<div class="panel">
+		<math xmlns="http://www.w3.org/1998/Math/MathML"><mi>I</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>&#xE9;</mi><mo>&#xA0;</mo><mi>c</mi><mi>a</mi><mi>r</mi><mi>b</mi><mi>o</mi><mi>n</mi><mi>e</mi><mo>&#xA0;</mo><mo>&#xD7;</mo><mo>&#xA0;</mo><mfenced><mrow><mfenced><mrow><mi>&#xC9;</mi><mi>n</mi><mi>e</mi><mi>r</mi><mi>g</mi><mi>i</mi><msub><mi>e</mi><mrow><mi>d</mi><mi>u</mi><mo>&#xA0;</mo><mi>t</mi><mi>e</mi><mi>r</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi>a</mi><mi>l</mi></mrow></msub></mrow></mfenced><mo>+</mo><mfenced><mrow><mi>&#xC9;</mi><mi>n</mi><mi>e</mi><mi>r</mi><mi>g</mi><mi>i</mi><msub><mi>e</mi><mrow><mi>d</mi><mi>u</mi><mo>&#xA0;</mo><mi>t</mi><mi>r</mi><mi>a</mi><mi>n</mi><mi>s</mi><mi>p</mi><mi>o</mi><mi>r</mi><mi>t</mi></mrow></msub></mrow></mfenced><mo>+</mo><mfenced><mrow><mi>&#xC9;</mi><mi>n</mi><mi>e</mi><mi>r</mi><mi>g</mi><mi>i</mi><msub><mi>e</mi><mrow><mi>s</mi><mi>e</mi><mi>r</mi><mi>v</mi><mi>e</mi><mi>u</mi><mi>r</mi></mrow></msub></mrow></mfenced></mrow></mfenced></math>
+		<p>Débit de la vidéo selon qualité sélectionnée : <span id="debit"></span> Mo/minutes</p>
+		<p>Poid de la vidéo selon qualité et durée indiquée : <span id="poid"></span> Mo</p>
+		<p>Consommation du terminal : <span id="consoTerminal"></span> Wh</p>
+		<p>Consommation du serveur : <span id="consoServeur"></span> Wh</p>
+		<p>Consommation de l'acheminement : <span id="consoInfra"></span> Wh (Infrastructure réseau)</p>
+		<p>Énergie totale consommée : <span id="consoTotale"></span> Wh</p>
+		<p>Intensité carbone du réseau électrique considéré : <span id="ICRF"></span> gCO<sub>2</sub>eq/kWh</p>
+		<p>Formule du calcul : Mise en forme compréhensible en cours de développement.</p>
+		<h4>Explication de l'empreinte carbone calculé en temps : </h4>
+		<p>Pour respecter les accords de Paris de la COP21 pour limiter le réchauffement à 2°C, pas plus, l'Humanité dispose d'un budget d'émission de carbone annuel.<br><br><br>
+		Explications en cours de rédaction.</p>
+	</div>
+	<a href="sources.html"><button class="btn">Voir les sources</button></a>
+</section>
+</section>
+
+<!-- Section fixé -->
+<section id="section_result">
+	<!-- <h2>Résultat :</h2> -->
+	<p id="paraph_result">
+		<span id="line_result">CO<sub>2</sub> émis : <span id="result"></span> gCO<sub>2</sub>eq<br>
+	Soit <span id="equitemps"></span> minutes de budget carbone.</span><br>
+	<span class="rapetisse">Temps équivalent objectif ≤2°C <br class="rm">( 2 Tonnes/CO<sub>2</sub>/tête/an )</span></p>
+</section>
+</body>
+</html>
