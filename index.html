@@ -54,29 +54,27 @@
 				var poid_total = duree * poidParMinute;
 				var energie_device = energie_flux_device * duree;
 				var energie_serveur = poid_total * 0.072;
-				// Poid(en Mo) * conso Data-Center (=7.2E-11 kWh/Octet = 0,072Wh/Mo) VÉRIFIER cette conversion !!!
+				// Poid(en Mo) * conso Data-Center (=7.2E-11 kWh/Octet = 0,072Wh/Mo)
 				var energie_infrastructure = energie_flux_infrastructure * poid_total;
 
 				var energie_totale = energie_device + energie_serveur + energie_infrastructure;
-				console.log("énergie totale : "+energie_totale);
 				var result = (energie_device + energie_serveur + energie_infrastructure) * (intensite_carbone_mix_elec_france/1000);
+				// On divise l'intensité carbone par 1000 car elle est donnée en g/kWh. On la veut en g/Wh.
 				var resultTemps = result * (365*24*60) / 2000000;
-				// 35 * ( (15 * 0.32) + (900 * 0.152) + (900 * 0.072) )
-				document.getElementById("ICRF").innerHTML=intensite_carbone_mix_elec_france;
+				// 0.035 * ( (15 * 0.32) + (900 * 0.152) + (900 * 0.072) )
+				document.getElementById("ICRF").innerHTML=intensite_carbone_mix_elec_france/1000; //  g/kWh >>> g/Wh
 				document.getElementById("durée").innerHTML=duree;
 				document.getElementById("energie_flux_device").innerHTML=energie_flux_device;
 				document.getElementById("energie_flux_infrastructure").innerHTML=energie_flux_infrastructure;
 				var span_poid_to_update = document.getElementsByClassName("poid");
-				console.log(span_poid_to_update);
-				for (var i = span_poid_to_update.length - 1; i >= 0; i--) {
-					span_poid_to_update[i].innerHTML = poid_total;
-				}
+				for (var i = span_poid_to_update.length - 1; i >= 0; i--) {span_poid_to_update[i].innerHTML = poid_total;}
 				document.getElementById("poid").innerHTML=poid_total.toFixed(2);
 				document.getElementById("consoTerminal").innerHTML = energie_device.toFixed(2);
 				document.getElementById("consoServeur").innerHTML = energie_serveur.toFixed(2);
 				document.getElementById("consoInfra").innerHTML = energie_infrastructure.toFixed(2);
 				document.getElementById("consoTotale").innerHTML = energie_totale.toFixed(2);
-				document.getElementById("result").innerHTML = result.toFixed(2);
+				var span_result_to_update = document.getElementsByClassName("result");
+				for (var i = span_result_to_update.length - 1; i >= 0; i--) {span_result_to_update[i].innerHTML = result.toFixed(2);}
 				document.getElementById("equitemps").innerHTML = parseInt(result);
 			}
 
@@ -103,7 +101,6 @@
 
 			/* AJUSTEMENT DE LA MARGE DE FIN DE SCROLL POUR ÉVITER RECOUVREMENT */
 			var result_height = document.getElementById('section_result').clientHeight;
-			console.log(result_height);
 			document.getElementById("main").style.margin = "0px 0px "+String(result_height)+"px 0px";
 
 		}
@@ -156,27 +153,25 @@
 
 </section>
 <section id="section_detaille">
-	<p>Émissions = <span id="ICRF"></span> X (
-		(<span id="durée"></span> X <span id="energie_flux_device"></span>)
-		+ (<span class="poid"></span> X <span id="energie_flux_infrastructure"></span>)
-		+ (<span class="poid"></span> X 0.072) )
-	</p>
+	<style type="text/css">.math,.math>sub{font-family: Times New Roman; font-style:italic}.math{font-size:1.4em;}.math>sub{font-size:0.7em;}</style>
+	
 	<button class="accordion">Voir les détails du calcul.</button>
 	<div class="panel">
-		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
-	<script type="text/x-mathjax-config">
-		MathJax.Hub.Config({tex2jax:{inlineMath:[["$","$"],["\\(","\\)"]]},"HTML-CSS":{linebreaks:{automatic:true,width:"container"}}});
-	</script>
 	<p>L'empreinte carbone s'exprime en grammes de CO2 équivalents émises pendant le processus. La source de ces émissions dans notre cas est celle généré pendant la production d'électricité nécessaire au fonctionnement des différents appareils mis en jeu : les centres de données qui expédient, le réseau qui achemine, le terminal (téléphone, ordinateur) qui reçoit et affiche la vidéo.</p>
-	<p><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>&#xC9;</mi><mi>m</mi><mi>i</mi><mi>s</mi><mi>s</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi>s</mi><mo>&#xA0;</mo><mi>C</mi><msub><mi>O</mi><mrow><mn>2</mn><mo>&#xA0;</mo><mi>p</mi><mi>a</mi><mi>r</mi><mo>&#xA0;</mo><mi>q</mi><mi>u</mi><mi>a</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>t</mi><mi>&#xE9;</mi><mo>&#xA0;</mo><mi>d</mi><mo>'</mo><mi>&#xE9;</mi><mi>n</mi><mi>e</mi><mi>r</mi><mi>g</mi><mi>i</mi><mi>e</mi></mrow></msub><mo>&#xA0;</mo><mo>&#xD7;</mo><mo>&#xA0;</mo><mpadded lspace="-1px"><mi>&#xC9;</mi><mi>n</mi><mi>e</mi><mi>r</mi><mi>g</mi><mi>i</mi><mi>e</mi><mo>&#xA0;</mo><mi>i</mi><mi>m</mi><mi>p</mi><mi>l</mi><mi>i</mi><mi>q</mi><mi>u</mi><mi>&#xE9;</mi></mpadded></math></p>
+	<p class="math">Émissions<sub>totales</sub> = Émissions CO<sub>2 par quantité d'énergie</sub> × Énergie impliqué<sub>par le processus</sub></p>
 	<p>Nous décomposons l'énergie impliqué comme ceci :</p>
-	<p><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>&#xC9;</mi><mi>m</mi><mi>i</mi><mi>s</mi><mi>s</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi>s</mi><mo>&#xA0;</mo><mi>C</mi><msub><mi>O</mi><mrow><mn>2</mn><mo>&#xA0;</mo><mi>p</mi><mi>a</mi><mi>r</mi><mo>&#xA0;</mo><mi>q</mi><mi>u</mi><mi>a</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>t</mi><mi>&#xE9;</mi><mo>&#xA0;</mo><mi>d</mi><mo>'</mo><mi>&#xE9;</mi><mi>n</mi><mi>e</mi><mi>r</mi><mi>g</mi><mi>i</mi><mi>e</mi></mrow></msub><mo>&#xA0;</mo><mo>&#xD7;</mo><mo>&#xA0;</mo><mfenced><mrow><mfenced><mrow><mi>&#xC9;</mi><mi>n</mi><mi>e</mi><mi>r</mi><mi>g</mi><mi>i</mi><msub><mi>e</mi><mrow><mi>d</mi><mi>u</mi><mo>&#xA0;</mo><mi>t</mi><mi>e</mi><mi>r</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi>a</mi><mi>l</mi></mrow></msub></mrow></mfenced><mo>+</mo><mfenced><mrow><mi>&#xC9;</mi><mi>n</mi><mi>e</mi><mi>r</mi><mi>g</mi><mi>i</mi><msub><mi>e</mi><mrow><mi>d</mi><mi>u</mi><mo>&#xA0;</mo><mi>t</mi><mi>r</mi><mi>a</mi><mi>n</mi><mi>s</mi><mi>p</mi><mi>o</mi><mi>r</mi><mi>t</mi></mrow></msub></mrow></mfenced><mo>+</mo><mfenced><mrow><mi>&#xC9;</mi><mi>n</mi><mi>e</mi><mi>r</mi><mi>g</mi><mi>i</mi><msub><mi>e</mi><mrow><mi>s</mi><mi>e</mi><mi>r</mi><mi>v</mi><mi>e</mi><mi>u</mi><mi>r</mi></mrow></msub></mrow></mfenced></mrow></mfenced></math></p>
+	<p class="math">Émissions CO<sub>2 par quantité d'énergie</sub> × ( Énergie<sub>du terminal</sub> + Énergie<sub>transport du signal</sub> + Énergie<sub>serveur</sub> )</p>
 	<p>L'énergie de chaque étape est calculé ainsi :</p>
-	<p><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>&#xC9;</mi><mi>m</mi><mi>i</mi><mi>s</mi><mi>s</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi>s</mi><mo>&#xA0;</mo><mi>C</mi><msub><mi>O</mi><mrow><mn>2</mn><mo>&#xA0;</mo><mi>p</mi><mi>a</mi><mi>r</mi><mo>&#xA0;</mo><mi>q</mi><mi>u</mi><mi>a</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>t</mi><mi>&#xE9;</mi><mo>&#xA0;</mo><mi>d</mi><mo>'</mo><mi>&#xE9;</mi><mi>n</mi><mi>e</mi><mi>r</mi><mi>g</mi><mi>i</mi><mi>e</mi></mrow></msub><mo>&#xA0;</mo><mo>&#xD7;</mo><mo>&#xA0;</mo><mfenced><mrow><mfenced><mrow><mi>T</mi><mi>e</mi><mi>m</mi><mi>p</mi><msub><mi>s</mi><mrow><mi>d</mi><mi>e</mi><mo>&#xA0;</mo><mi>v</mi><mi>i</mi><mi>s</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi>a</mi><mi>g</mi><mi>e</mi></mrow></msub><mo>&#xD7;</mo><mi>C</mi><mi>o</mi><mi>n</mi><mi>s</mi><mi>o</mi><mi>m</mi><mi>m</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>&#xA0;</mo><mi>d</mi><mi>u</mi><mo>&#xA0;</mo><mi>t</mi><mi>e</mi><mi>r</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi>a</mi><msub><mi>l</mi><mrow><mi>p</mi><mi>a</mi><mi>r</mi><mo>&#xA0;</mo><mi>m</mi><mi>i</mi><mi>n</mi><mi>u</mi><mi>t</mi><mi>e</mi><mo>&#xA0;</mo><mi>d</mi><mi>e</mi><mo>&#xA0;</mo><mi>v</mi><mi>i</mi><mi>s</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi>a</mi><mi>g</mi><mi>e</mi></mrow></msub></mrow></mfenced><mo>+</mo><mfenced><mrow><mi>M</mi><mi>&#xE9;</mi><mi>g</mi><mi>a</mi><mi>O</mi><mi>c</mi><mi>t</mi><mi>e</mi><mi>t</mi><mi>s</mi><mo>&#xA0;</mo><mi>t</mi><mi>r</mi><mi>a</mi><mi>n</mi><mi>s</mi><mi>m</mi><mi>i</mi><mi>s</mi><mo>&#xD7;</mo><mi>C</mi><mi>o</mi><mi>n</mi><mi>s</mi><mi>o</mi><mi>m</mi><mi>m</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>&#xA0;</mo><mi>d</mi><mi>u</mi><mo>&#xA0;</mo><mi>r</mi><mi>&#xE9;</mi><mi>s</mi><mi>e</mi><mi>a</mi><msub><mi>u</mi><mrow><mi>p</mi><mi>a</mi><mi>r</mi><mo>&#xA0;</mo><mi>M</mi><mi>o</mi><mo>&#xA0;</mo><mi>t</mi><mi>r</mi><mi>a</mi><mi>n</mi><mi>s</mi><mi>m</mi><mi>i</mi><mi>s</mi></mrow></msub></mrow></mfenced><mo>+</mo><mfenced><mrow><mi>M</mi><mi>&#xE9;</mi><mi>g</mi><mi>a</mi><mi>O</mi><mi>c</mi><mi>t</mi><mi>e</mi><mi>t</mi><mi>s</mi><mo>&#xA0;</mo><mi>t</mi><mi>r</mi><mi>a</mi><mi>n</mi><mi>s</mi><mi>m</mi><mi>i</mi><mi>s</mi><mo>&#xD7;</mo><mi>C</mi><mi>o</mi><mi>n</mi><mi>s</mi><mi>o</mi><mi>m</mi><mi>m</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>&#xA0;</mo><mi>d</mi><mi>u</mi><mo>&#xA0;</mo><mi>s</mi><mi>e</mi><mi>r</mi><mi>v</mi><mi>e</mi><mi>u</mi><msub><mi>r</mi><mrow><mi>p</mi><mi>a</mi><mi>r</mi><mo>&#xA0;</mo><mi>M</mi><mi>o</mi><mo>&#xA0;</mo><mi>e</mi><mi>x</mi><mi>p</mi><mi>e</mi><mi>d</mi><mi>i</mi><mi>&#xE9;</mi></mrow></msub></mrow></mfenced></mrow></mfenced></math></p>
+	<p class="math">Émissions CO<sub>2 par quantité d'énergie</sub> × ( ( Temps<sub>de visionage</sub> × Consommation du terminal<sub>par minute de visionage</sub> )+( MégaOctets<sub>transmis</sub> × Consommation du réseau<sub>par Mo transmis</sub> )+( MégaOctets<sub>transmis</sub> × Consommation du serveur<sub>par Mo expedié</sub> ) )</p>
 	<p>Tout ceci s'exprime dans les unitées suivantes :</p>
-	<p><math xmlns="http://www.w3.org/1998/Math/MathML"><mfenced open="[" close="]"><mrow><mi>g</mi><mi>C</mi><msub><mi>O</mi><mn>2</mn></msub><mo>/</mo><mi>W</mi><mi>h</mi></mrow></mfenced><mo>&#xD7;</mo><mo>(</mo><mo>(</mo><mfenced open="[" close="]"><mrow><mi>m</mi><mi>i</mi><mi>n</mi><mi>u</mi><mi>t</mi><mi>e</mi><mi>s</mi></mrow></mfenced><mo>&#xD7;</mo><mfenced open="[" close="]"><mrow><mi>W</mi><mi>h</mi><mo>/</mo><mi>m</mi><mi>i</mi><mi>n</mi></mrow></mfenced><mo>)</mo><mo>+</mo><mo>(</mo><mfenced open="[" close="]"><mrow><mi>M</mi><mi>o</mi></mrow></mfenced><mo>&#xD7;</mo><mfenced open="[" close="]"><mrow><mi>W</mi><mi>h</mi><mo>/</mo><mi>M</mi><mi>o</mi></mrow></mfenced><mo>)</mo><mo>+</mo><mo>(</mo><mfenced open="[" close="]"><mrow><mi>M</mi><mi>o</mi></mrow></mfenced><mo>&#xD7;</mo><mfenced open="[" close="]"><mrow><mi>W</mi><mi>h</mi><mo>/</mo><mi>M</mi><mi>o</mi></mrow></mfenced><mo>)</mo><mo>)</mo></math></p>
+	<p class="math">[gCO2/Wh] × ( ( [minutes]×[Wh/min] )+( [Mo]×[Wh/Mo] )+( [Mo]×[Wh/Mo] ) )</p>
 	<p>Et avec les valeurs suivantes selon vos paramètres :</p>
-	
+	<p>Émissions = <span id="ICRF"></span> × (
+		(<span id="durée"></span> × <span id="energie_flux_device"></span>)
+		+ (<span class="poid"></span> × <span id="energie_flux_infrastructure"></span>)
+		+ (<span class="poid"></span> × 0.072) ) 
+		= <span class="result"></span> gCO<sub>2</sub>eq
+	</p>
 		<div style="display: none">
 			<p>Débit de la vidéo selon qualité sélectionnée : <span id="debit"></span> Mo/minutes</p>
 			<p>Poid de la vidéo selon qualité et durée indiquée : <span id="poid"></span> Mo</p>
@@ -198,7 +193,7 @@
 <section id="section_result">
 	<!-- <h2>Résultat :</h2> -->
 	<p id="paraph_result">
-		<span id="line_result">CO<sub>2</sub> émis : <span id="result"></span> gCO<sub>2</sub>eq<br>
+		<span id="line_result">CO<sub>2</sub> émis : <span id="result" class="result"></span> gCO<sub>2</sub>eq<br>
 	Soit <span id="equitemps"></span> minutes de budget carbone.</span><br>
 	<span class="rapetisse">Temps équivalent objectif ≤2°C <br class="rm">( 2 Tonnes/CO<sub>2</sub>/tête/an )</span></p>
 </section>
