@@ -155,7 +155,7 @@
 <section id="section_detaille">	
 	<button class="accordion">Voir les détails du calcul.</button>
 	<div class="panel">
-	<p>L'empreinte carbone s'exprime en grammes de CO2 équivalents émises pendant le processus. La source de ces émissions dans notre cas est celle généré pendant la production d'électricité nécessaire au fonctionnement des différents appareils mis en jeu : les centres de données qui expédient, le réseau qui achemine, le terminal (téléphone, ordinateur) qui reçoit et affiche la vidéo.</p>
+	<p>L'empreinte carbone s'exprime en grammes de CO₂ équivalents émises pendant le processus. La source de ces émissions dans notre cas est celle généré pendant la production d'électricité nécessaire au fonctionnement des différents appareils mis en jeu : les centres de données qui expédient, le réseau qui achemine, le terminal (téléphone, ordinateur) qui reçoit et affiche la vidéo.</p>
 	<p class="math">Émissions<sub>totales</sub> = Émissions CO<sub>2 par quantité d'énergie</sub> × Énergie impliqué<sub>par le processus</sub></p>
 	<p>Nous décomposons l'énergie impliqué comme ceci :</p>
 	<p class="math">Émissions CO<sub>2 par quantité d'énergie</sub> × ( Énergie<sub>du terminal</sub> + Énergie<sub>transport du signal</sub> + Énergie<sub>serveur</sub> )</p>
@@ -164,7 +164,7 @@
 	<p>Tout ceci s'exprime dans les unitées suivantes :</p>
 	<p class="math">[gCO2/Wh] × ( ( [minutes]×[Wh/min] )+( [Mo]×[Wh/Mo] )+( [Mo]×[Wh/Mo] ) )</p>
 	<p>Et avec les valeurs suivantes selon vos paramètres :</p>
-	<p>Émissions = <span id="ICRF"></span> × (
+	<p class="demo_calc1">Émissions = <span id="ICRF"></span> × (
 		(<span id="durée"></span> × <span id="energie_flux_device"></span>)
 		+ (<span class="poid"></span> × <span id="energie_flux_infrastructure"></span>)
 		+ (<span class="poid"></span> × 0.072) ) 
@@ -180,8 +180,9 @@
 			<p>Intensité carbone du réseau électrique considéré : <span id="ICRF"></span> gCO<sub>2</sub>eq/kWh</p>
 		</div>
 		<h4>Explication de l'empreinte carbone calculé en temps : </h4>
-		<p>Pour respecter les accords de Paris de la COP21 pour limiter le réchauffement à 2°C, pas plus, l'Humanité dispose d'un budget d'émission de carbone annuel.<br><br>
-		Explications en cours de rédaction.</p>
+		<p>Pour respecter les accords de Paris de la COP21 pour limiter le réchauffement à 2°C, pas plus, l'Humanité dispose d'un budget d'émission de carbone annuel : 2 tonnes de CO₂ par personnes et par an. En connaissant son budget annuel, nous pouvons voir l'impact de n'importe quelle émission en portion de ce budget annuel.<br>
+		Si un voyage en avion en émet 500 kg et que la limite acceptable par personne et par an est de 2 tonnes, alors ce vol consomme un quart de crédit annuel : en 2 heures de vol, j'ai grillé trois mois de mon crédit carbone !
+		</p>
 	</div>
 	<a href="sources.html"><button class="btn">Voir les sources</button></a>
 </section>

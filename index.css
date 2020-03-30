@@ -99,9 +99,10 @@ input[type="number"]:focus{border:solid 4px #675032;}
 }
 
 /* ÉQUATIONS #MATH */
-.math,.math>sub{font-family: Times New Roman; font-style:italic}
+.math,.math>sub{font-family: Times New Roman; font-style:italic; color:#b7ce7b;}
 .math{font-size:1.4em;}
 .math>sub{font-size:0.7em;}
+.demo_calc1,.demo_calc1>*{color:#9ec0e2;}
 
 /* RÉSULTAT */
 #section_result{
