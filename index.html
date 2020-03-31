@@ -5,112 +5,20 @@
 	<meta name=description content="Empreinte carbone du streaming vidéo">
 	<meta name=viewport content="width=device-width, initial-scale=1">
 	<title>VCO2 Empreinte vidéo</title>
+	<script src="index.js"></script>
 	<link rel="stylesheet" type="text/css" href="API-accordeon-deroulant.css">
 	<link rel="shortcut icon" type="image/png" href="/favicon.png"/>
 	<script src="API-accordeon-deroulant.js"></script>
 	<link rel="stylesheet" type="text/css" href="index.css">
-	<link rel="shortcut icon" type="image/png" href="favicon.png"/>
-	<script type="text/javascript">
-		/* Le code CSS ET JS de l'accordéon est dans un fichier séparé API-accordeon-deroulant.js/css */
-
-		/* CONSTANTES */
-		// var intensite_carbone_mix_elec_france = 35; // gCO2eq/kWh
-
-		/* CALCUL */
-
-		function calcul (){
-				// On regarde quelle box est checké (qualité vidéo) :
-				var qualiteElementsList = document.getElementsByName("qualite_choice");
-				for (var i = qualiteElementsList.length - 1; i >= 0; i--) {
-					if (qualiteElementsList[i].checked) {
-						poidParMinute = qualiteElementsList[i].value;
-						document.getElementById("debit").innerHTML = parseFloat(qualiteElementsList[i].value);
-					}
-				}
-				// On regarde quelle box est checké (appareil / device / terminal) :
-				var deviceElementsList = document.getElementsByName("device_choice");
-				for (var i = deviceElementsList.length - 1; i >= 0; i--) {
-					if (deviceElementsList[i].checked) {
-						var energie_flux_device = parseFloat(deviceElementsList[i].value);
-					}
-				}
-				// On regarde quelle box est checké (appareil / device / terminal) :
-				var infraElementsList = document.getElementsByName("infra_choice");
-				for (var i = infraElementsList.length - 1; i >= 0; i--) {
-					if (infraElementsList[i].checked) {
-						var energie_flux_infrastructure = parseFloat(infraElementsList[i].value);
-					}
-				}
-				// On regarde quelle box est checké (mix énergétique) :
-				var mixElementList = document.getElementsByName("mix_choice");
-				for (var i = mixElementList.length - 1; i >= 0; i--) {
-					if (mixElementList[i].checked) {
-						var intensite_carbone_mix_elec_france = parseFloat(mixElementList[i].value);
-					}
-				}
-				var duree = parseInt(document.getElementById("time").value);
-				var poid_total = duree * poidParMinute;
-				var energie_device = energie_flux_device * duree;
-				var energie_serveur = poid_total * 0.072;
-				// Poid(en Mo) * conso Data-Center (=7.2E-11 kWh/Octet = 0,072Wh/Mo)
-				var energie_infrastructure = energie_flux_infrastructure * poid_total;
-
-				var energie_totale = energie_device + energie_serveur + energie_infrastructure;
-				var result = (energie_device + energie_serveur + energie_infrastructure) * (intensite_carbone_mix_elec_france/1000);
-				// On divise l'intensité carbone par 1000 car elle est donnée en g/kWh. On la veut en g/Wh.
-				var resultTemps = result * (365*24*60) / 2000000;
-				// 0.035 * ( (15 * 0.32) + (900 * 0.152) + (900 * 0.072) )
-				document.getElementById("ICRF").innerHTML=intensite_carbone_mix_elec_france/1000; //  g/kWh >>> g/Wh
-				document.getElementById("durée").innerHTML=duree;
-				document.getElementById("energie_flux_device").innerHTML=energie_flux_device;
-				document.getElementById("energie_flux_infrastructure").innerHTML=energie_flux_infrastructure;
-				var span_poid_to_update = document.getElementsByClassName("poid");
-				for (var i = span_poid_to_update.length - 1; i >= 0; i--) {span_poid_to_update[i].innerHTML = poid_total;}
-				document.getElementById("poid").innerHTML=poid_total.toFixed(2);
-				document.getElementById("consoTerminal").innerHTML = energie_device.toFixed(2);
-				document.getElementById("consoServeur").innerHTML = energie_serveur.toFixed(2);
-				document.getElementById("consoInfra").innerHTML = energie_infrastructure.toFixed(2);
-				document.getElementById("consoTotale").innerHTML = energie_totale.toFixed(2);
-				var span_result_to_update = document.getElementsByClassName("result");
-				for (var i = span_result_to_update.length - 1; i >= 0; i--) {span_result_to_update[i].innerHTML = result.toFixed(2);}
-				document.getElementById("equitemps").innerHTML = parseInt(result);
-			}
-
-
-
-		window.onload = function(){
-
-			chopperEtActiverAccordeon();//Code de la fonction dans API-accordeon-deroulant.js
-
-			// Appliquer les régalges par défaut aux checkbox-ratio
-			var ratioCheckedByDefaultList = document.getElementsByClassName("default");
-			for (var i = ratioCheckedByDefaultList.length - 1; i >= 0; i--) {
-				ratioCheckedByDefaultList[i].checked = true;
-			}			
-
-			// Pour que tout les boutons estampillés class="listener" déclenche le calcul au moindre clic :
-			var listenerList = document.getElementsByClassName("listener");
-			for (i = 0; i < listenerList.length; i++) {
-				listenerList[i].addEventListener("click", calcul, false);
-			}
-
-			// Lancement du calcul dès chargement de la page
-			calcul();
-
-			/* AJUSTEMENT DE LA MARGE DE FIN DE SCROLL POUR ÉVITER RECOUVREMENT */
-			var result_height = document.getElementById('section_result').clientHeight;
-			document.getElementById("main").style.margin = "0px 0px "+String(result_height)+"px 0px";
-
-		}
-	</script>
 </head>
 <body>
+<!-- Section primaire pour dissociation avec bloc fixe -->
 <section id="main">
-<section>
+<section><!-- Section 1 -->
 	<h1 id="title">VCO2 - L'empreinte vidéo</h1>
 	<p>Quelle est l'empreinte carbone de votre vidéo de ce soir ?</p>
 </section>
-<section>
+<section><!-- Section 2 - Formulaire -->
 	<form method="post" action="#">
 		<!-- Qualité / Temps / Device -->
 		<label for="qualite">Quelle qualité ?</label> :
@@ -120,10 +28,9 @@
 			<label class="container droit"><input type="radio" name="qualite_choice" value="37.5" class="listener"><span>720p</span></label>
 			<label class="container droit"><input type="radio" name="qualite_choice" value="18.8" class="listener"><span>480p</span></label>
 			<label class="container droit"><input type="radio" name="qualite_choice" value="07.5" class="listener"><span>360p</span></label>
-			<!-- Suggestion Très élevé (4K), Standard (1080p), Basse définition (360p) -->
+			<!-- Suggestion : "Très élevé" (4K), "Standard" (1080p), "Basse définition" (360p) -->
 			<!-- Par défaut : 1080p -->
 		</p>
-		<!-- &nbsp; -->
 		<label for="temps" class="etiquette">Nous regardons une vidéo de quelle durée ? </label>
 		<p class="Question" id="Q2">
 			<input id="time" type="number" name="number_picked" min="0" max="999" step="1" value="15" oninput="calcul()">
@@ -148,9 +55,8 @@
 			<label class="container plat"><input type="radio" name="mix_choice" value="550" class="listener"><span>Moyenne Monde</span></label>
 		</p>
 	</form>
-
 </section>
-<section id="section_detaille">	
+<section id="section_detaille"><!-- Section 3 - Détails du calcul -->
 	<button class="accordion">Voir les détails du calcul.</button>
 	<div class="panel">
 	<p>L'empreinte carbone s'exprime en grammes de CO₂ équivalents émis pendant le processus. La source de ces émissions dans notre cas est celle généré pendant la production d'électricité nécessaire au fonctionnement des différents appareils mis en jeu : les centres de données qui expédient, le réseau qui achemine, le terminal (téléphone, ordinateur) qui reçoit et affiche la vidéo.</p>
@@ -186,9 +92,8 @@
 </section>
 </section>
 
-<!-- Section fixé -->
+<!-- Section primaire : fixé (résultats) -->
 <section id="section_result">
-	<!-- <h2>Résultat :</h2> -->
 	<p id="paraph_result">
 		<span id="line_result">CO<sub>2</sub> émis : <span id="result" class="result"></span> gCO<sub>2</sub>eq<br>
 	Soit <span id="equitemps"></span> minutes de budget carbone.</span><br>
