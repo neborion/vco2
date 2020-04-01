@@ -1,8 +1,19 @@
 /* Le code CSS ET JS de l'accordéon est dans un fichier séparé API-accordeon-deroulant.js/css */
 
 /* CALCUL */
+
+// fonction de formatage des durées. minutes -> mois/jours/heures/minutes.
+function formatDuration (x){
+	if(x>43200){var mois = parseInt(x/43200); x=x%43200;}
+	if(x>1440){var jours = parseInt(x/1440); x=x%1440;}
+	if(x>60){var heures = parseInt(x/60); var min=x%60;}else{var min=Math.round(x);}
+	return mois+" mois, "+jours+" jours, "+heures+" heures, "+min+" min. "+x;
+}
+
 function calcul (){
 	// Les valeurs du calcul sont données par l'attribut "value" des balises input du formulaire d'index.html
+
+
 
 	// On regarde quelle box est checké (qualité vidéo) :
 	var qualiteElementsList = document.getElementsByName("qualite_choice");
@@ -57,8 +68,10 @@ function calcul (){
 	document.getElementById("consoInfra").innerHTML = energie_infrastructure.toFixed(2);
 	document.getElementById("consoTotale").innerHTML = energie_totale.toFixed(2);
 	var span_result_to_update = document.getElementsByClassName("result");
-	for (var i = span_result_to_update.length - 1; i >= 0; i--) {span_result_to_update[i].innerHTML = result.toFixed(2);}
-	document.getElementById("equitemps").innerHTML = parseInt(result);
+	for (var i = span_result_to_update.length - 1; i >= 0; i--){span_result_to_update[i].innerHTML = result.toFixed(2);}
+	document.getElementById("equitemps").innerHTML = Math.round(resultTemps);
+
+	console.log(formatDuration(resultTemps));
 }
 
 window.onload = function(){
@@ -78,9 +91,10 @@ window.onload = function(){
 	}
 
 	// Lancement du calcul dès chargement de la page
-	calcul();
+	formatDuration(calcul());
 
 	/* AJUSTEMENT DE LA MARGE DE FIN DE SCROLL POUR ÉVITER RECOUVREMENT */
 	var result_height = document.getElementById('section_result').clientHeight;
 	document.getElementById("main").style.margin = "0px 0px "+String(result_height)+"px 0px";
+	
 }
