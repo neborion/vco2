@@ -18,8 +18,5 @@ Un listener est lié à chaque input pour actualiser le résultat à chaque vari
 Voir la rubrique "détail du calcul" dans index.html ainsi que la page sources.html pour plus d'informations.
 
 Le domaine du calcul se limite à l'hébergement & traitement serveur, l'acheminement des données via le réseau, et le fonctionnement du terminal utilisateur.
-<<<<<<< HEAD
 Il ne comprend pas les émissions liées à la production, l'acheminement de ces appareils, ni celles liées à la production des contenus visionnés.
-=======
-Il ne comprend pas les émissions liées à la production, l'acheminement de ces appareils, ni celles lié à la production des contenus visionnés.
->>>>>>> origin/master
+
