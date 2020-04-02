@@ -14,18 +14,6 @@ section#main{
   align-items: center;
   flex-wrap: wrap;
 }
-.Question label[for]{
-}
-.droit{
-  /*display: flex;*/
-
-  /*position: relative;*/
-}
-.plat{
-  /*display: flex;*/
-  /*position: relative;*/
-}
-
 
 /* PERSONNALISATION DES BOUTONS RADIO • */
 /* Customize the label (the container) */
@@ -121,3 +109,7 @@ input[type="number"]:focus{border:solid 4px #675032;}
   .rapetisse{font-size: 10px;}
   .rm{display:none;}
 }
+
+/* PAGES TEXTES (SOURCES) */
+#sources a{color: #b7ce7b;}
+#sources a:hover{color: #f9992a;}
