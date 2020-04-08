@@ -24,11 +24,12 @@
 		<!-- Qualité / Temps / Device -->
 		<label for="qualite">Quelle qualité ?</label> :
 		<p class="Question" id="Q1">
-			<label class="container droit"><input type="radio" name="qualite_choice" value="0300" class="listener"><span>&nbsp;4K&nbsp;</span></label>
-			<label class="container droit"><input type="radio" name="qualite_choice" value="0060" class="listener default"><span>1080p</span></label>
-			<label class="container droit"><input type="radio" name="qualite_choice" value="37.5" class="listener"><span>720p</span></label>
-			<label class="container droit"><input type="radio" name="qualite_choice" value="18.8" class="listener"><span>480p</span></label>
-			<label class="container droit"><input type="radio" name="qualite_choice" value="07.5" class="listener"><span>360p</span></label>
+			<label class="container droit"><input type="radio" name="qualite_choice" value="0272" class="listener"><span>&nbsp;4K&nbsp;</span></label>
+			<label class="container droit"><input type="radio" name="qualite_choice" value="53.8" class="listener default"><span>1080p</span></label>
+			<label class="container droit"><input type="radio" name="qualite_choice" value="33.3" class="listener"><span>720p</span></label>
+			<label class="container droit"><input type="radio" name="qualite_choice" value="15.2" class="listener"><span>480p</span></label>
+			<label class="container droit"><input type="radio" name="qualite_choice" value="6.25" class="listener"><span>360p</span></label>
+			<label class="container droit"><input type="radio" name="qualite_choice" value="2.88" class="listener"><span>Audio</span></label>
 			<!-- Suggestion : "Très élevé" (4K), "Standard" (1080p), "Basse définition" (360p) -->
 			<!-- Par défaut : 1080p -->
 		</p>
@@ -51,8 +52,8 @@
 		<p>L'impact change selon la manière dont on produit l'électricité. Voici 3 échelles géographiques.<br>
 		<label for="intensite_mix" class="etiquette">Intensité carbone selon mix électrique :</label></p>
 		<p class="Question" id="Q5">
-			<label class="container plat"><input type="radio" name="mix_choice" value="35" class="listener default"><span>Moyenne France</span></label>
-			<label class="container plat"><input type="radio" name="mix_choice" value="344" class="listener"><span>Moyenne Europe</span></label>
+			<label class="container plat"><input type="radio" name="mix_choice" value="57.1" class="listener default"><span>Moyenne France</span></label>
+			<label class="container plat"><input type="radio" name="mix_choice" value="420" class="listener"><span>Moyenne Europe</span></label>
 			<label class="container plat"><input type="radio" name="mix_choice" value="550" class="listener"><span>Moyenne Monde</span></label>
 		</p>
 	</form>
@@ -61,19 +62,19 @@
 	<button class="accordion">Voir les détails du calcul.</button>
 	<div class="panel">
 	<p>L'empreinte carbone s'exprime en grammes de CO₂ équivalents émis pendant le processus. La source de ces émissions dans notre cas est celle généré pendant la production d'électricité nécessaire au fonctionnement des différents appareils mis en jeu : les centres de données qui expédient, le réseau qui achemine, le terminal (téléphone, ordinateur) qui reçoit et affiche la vidéo.</p>
-	<p class="math">Émissions<sub>totales</sub> = Émissions CO<sub>2 par quantité d'énergie</sub> × Énergie impliqué<sub>par le processus</sub></p>
+	<p class="math">Émissions<sub>totales</sub> = Émissions CO₂<sub> par quantité d'énergie</sub> × Énergie impliqué<sub>par le processus</sub></p>
 	<p>Nous décomposons l'énergie impliqué comme ceci :</p>
-	<p class="math">Émissions CO<sub>2 par quantité d'énergie</sub> × ( Énergie<sub>du terminal</sub> + Énergie<sub>transport du signal</sub> + Énergie<sub>serveur</sub> )</p>
+	<p class="math">Émissions CO₂<sub> par quantité d'énergie</sub> × ( Énergie<sub>du terminal</sub> + Énergie<sub>transport du signal</sub> + Énergie<sub>serveur</sub> )</p>
 	<p>L'énergie de chaque étape est calculé ainsi :</p>
-	<p class="math">Émissions CO<sub>2 par quantité d'énergie</sub> × ( ( Temps<sub>de visionage</sub> × Consommation du terminal<sub>par minute de visionage</sub> )+( MégaOctets<sub>transmis</sub> × Consommation du réseau<sub>par Mo transmis</sub> )+( MégaOctets<sub>transmis</sub> × Consommation du serveur<sub>par Mo expedié</sub> ) )</p>
+	<p class="math">Émissions CO₂<sub> par quantité d'énergie</sub> × ( ( Temps<sub>de visionage</sub> × Consommation du terminal<sub>par minute de visionage</sub> )+( MégaOctets<sub>transmis</sub> × Consommation du réseau<sub>par Mo transmis</sub> )+( MégaOctets<sub>transmis</sub> × Consommation du serveur<sub>par Mo expedié</sub> ) )</p>
 	<p>Tout ceci s'exprime dans les unitées suivantes :</p>
-	<p class="math">[gCO2/Wh] × ( ( [minutes]×[Wh/min] )+( [Mo]×[Wh/Mo] )+( [Mo]×[Wh/Mo] ) )</p>
+	<p class="math">[gCO₂/Wh] × ( ( [minutes]×[Wh/min] )+( [Mo]×[Wh/Mo] )+( [Mo]×[Wh/Mo] ) )</p>
 	<p>Et avec les valeurs suivantes selon vos paramètres :</p>
 	<p class="demo_calc1">Émissions = <span id="ICRF"></span> × (
 		(<span id="durée"></span> × <span id="energie_flux_device"></span>)
 		+ (<span class="poid"></span> × <span id="energie_flux_infrastructure"></span>)
 		+ (<span class="poid"></span> × 0.072) ) 
-		= <span class="result"></span> gCO<sub>2</sub>eq
+		= <span class="result"></span> gCO₂eq
 	</p>
 		<div style="display: none">
 			<p>Débit de la vidéo selon qualité sélectionnée : <span id="debit"></span> Mo/minutes</p>
@@ -82,7 +83,7 @@
 			<p>Consommation du serveur : <span id="consoServeur"></span> Wh</p>
 			<p>Consommation de l'acheminement : <span id="consoInfra"></span> Wh (Infrastructure réseau)</p>
 			<p>Énergie totale consommée : <span id="consoTotale"></span> Wh</p>
-			<p>Intensité carbone du réseau électrique considéré : <span id="ICRF"></span> gCO<sub>2</sub>eq/kWh</p>
+			<p>Intensité carbone du réseau électrique considéré : <span id="ICRF"></span> gCO₂eq/kWh</p>
 		</div>
 		<h4>Explication de l'empreinte carbone calculé en temps : </h4>
 		<p>Pour respecter les accords de Paris de la COP21 pour limiter le réchauffement à 2°C, pas plus, l'Humanité dispose d'un budget d'émission de carbone annuel : 2 tonnes de CO₂ par personnes et par an. En connaissant son budget annuel, nous pouvons voir l'impact de n'importe quelle émission en portion de ce budget annuel.<br>
@@ -96,9 +97,9 @@
 <!-- Section primaire : fixé (résultats) -->
 <section id="section_result">
 	<p id="paraph_result">
-		<span id="line_result">CO<sub>2</sub> émis : <span id="result" class="result"></span> gCO<sub>2</sub>eq<br>
-	Soit <span id="equitemps"></span> de budget carbone.</span><br>
-	<span class="rapetisse">Temps équivalent objectif ≤2°C <br class="rm">( 2 Tonnes/CO<sub>2</sub>/tête/an )</span></p>
+		<span id="line_result">CO₂ émis : <span id="result" class="result"></span> gCO₂eq<br>
+	Soit <span id="equitemps"></span> de budget carbone pour <span id="tmpvisio"></span> de visionnage.</span><br>
+	<span class="rapetisse">Temps équivalent objectif ≤+2°C <br class="rm">( 2 Tonnes/CO₂/tête/an )</span></p>
 </section>
 </body>
 </html>

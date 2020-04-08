@@ -18,6 +18,16 @@ function formatDuration (x){
 	str=pluriel(str,min,"minute");
 	return str;
 }
+function formatDurationCourt (x){
+	if(x<1){return "0";}
+	var str = "";
+	if(x>43200){var mois = parseInt(x/43200); x=x%43200; str=str+mois+"mois ";}
+	if(x>1440){var jours = parseInt(x/1440); x=x%1440; str=str+jours+"J ";}
+	if(x>60){var heures = parseInt(x/60); var min=Math.round(x%60); str=str+heures+"H ";}else{var min=Math.round(x);}
+	str=str+min+"min";
+	console.log("Low Str : "+str);
+	return str;
+}
 
 /* AJUSTEMENT DE LA MARGE DE FIN DE SCROLL POUR ÉVITER RECOUVREMENT */
 function ajustBottomVoidSpace(){
@@ -88,6 +98,14 @@ function calcul (){
 	var span_result_to_update = document.getElementsByClassName("result");
 	for (var i = span_result_to_update.length - 1; i >= 0; i--){span_result_to_update[i].innerHTML = result.toFixed(2);}
 	document.getElementById("equitemps").innerHTML = formatDuration(resultTemps);
+	document.getElementById("tmpvisio").innerHTML = formatDurationCourt(duree);
+	if(resultTemps>duree){
+		document.getElementById("equitemps").style.color="#f9992a";
+		document.getElementById("tmpvisio").style.color="#f9992a";
+	}else{
+		document.getElementById("equitemps").style.color="#b7ce7b";
+		document.getElementById("tmpvisio").style.color="#b7ce7b";
+	}
 	
 	ajustBottomVoidSpace() // Ajustement mis-en-page anti-recouvrement bas de page.
 }
