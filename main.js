@@ -1,5 +1,10 @@
 /* Le code CSS ET JS de l'accordéon est dans un fichier séparé API-accordeon-deroulant.js/css */
 
+/* Stepper */
+function stepper(stepValue){
+	
+}
+
 /* Fonctions de formatage - résultat en unité TEMPS */
 
 // Fonction de cosmetique orthographique

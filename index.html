@@ -35,8 +35,10 @@
 		</p>
 		<label for="temps" class="etiquette">Nous regardons une vidéo de quelle durée ? </label>
 		<p class="Question" id="Q2">
+			<button class="container stepBtn" id="bk1" onclick="stepper(-30)"><span>-1</span></button><button class="container stepBtn" id="bk1" onclick="stepper(-10)"><span>-10</span></button><button class="container stepBtn" id="bk1" onclick="stepper(-1)"><span>-30</span></button>
 			<input id="time" type="number" name="number_picked" min="0" max="999" step="1" value="15" oninput="calcul()">
 			<span> minutes</span>
+			<button class="container stepBtn" id="bk1" onclick="stepper(1)"><span>+1</span></button><button class="container stepBtn" id="bk1" onclick="stepper(10)"><span>+10</span></button><button class="container stepBtn" id="bk1" onclick="stepper(30)"><span>+30</span></button>
 		</p>
 		<label for="device" class="etiquette">Sur quoi regardons nous cette vidéo ? </label>
 		<p class="Question" id="Q3">
